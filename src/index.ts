@@ -158,6 +158,7 @@ async function run() {
   for (const zoneName of Object.keys(zoneFiles)) {
     const zonePath = path.join(destination, `${zoneName}.zone`);
     zoneFiles[zoneName].unshift("@ SOA vodka.dns.neatcoin.org. postmaster.that.world. (0 21600 3600 604800 86400)");
+    zoneFiles[zoneName].unshift("@ NS vodka.dns.neatcoin.org.");
     await writeFile(zonePath, zoneFiles[zoneName].join("\n"));
   }
 
