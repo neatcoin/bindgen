@@ -7,6 +7,9 @@
   "author": "Wei Tang <wei@that.world>",
   "license": "GPL-3.0",
   "private": false,
+  "bin": {
+    "neatcoin-bindgen": "./dist/index.js"
+  },
   "scripts": {
     "build": "tsc"
   },
