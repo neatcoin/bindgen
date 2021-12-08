@@ -1,0 +1,10 @@
+{
+  "name": "@neatcoin/bindgen",
+  "version": "0.1.0",
+  "description": "Neatcoin BIND named config generator.",
+  "main": "src/index.js",
+  "repository": "https://github.com/neatcoin/bindgen",
+  "author": "Wei Tang <wei@that.world>",
+  "license": "GPL-3.0",
+  "private": false
+}
