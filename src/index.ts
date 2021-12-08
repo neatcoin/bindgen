@@ -150,7 +150,8 @@ async function run() {
   }
 
   for (const tld of Object.keys(zoneFiles)) {
-    namedFile += `\nzone "${tld}" { type master; file "${tld}.zone"; };`;
+    const tldPath = path.join(destination, `${tld}.zone`);
+    namedFile += `\nzone "${tld}" { type master; file "${tldPath}"; };`;
   }
 
   await mkdir(destination, { recursive: true });
