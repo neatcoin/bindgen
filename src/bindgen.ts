@@ -70,7 +70,19 @@ export async function run() {
     throw new Error("DESTINATION is not defined.");
   }
 
-  const provider = new WsProvider("wss://vodka.rpc.neatcoin.org/ws");
+  const network = process.env.NETWORK;
+  if (network !== "neatcoin" && network !== "vodka") {
+    throw new Error("Unknown network.");
+  }
+
+  let provider;
+  if (network === "neatcoin") {
+    provider = new WsProvider("wss://rpc.neatcoin.org/ws");
+  } else if (network == "vodka") {
+    provider = new WsProvider("wss://vodka.rpc.neatcoin.org/ws");
+  } else {
+    throw new Error("Unknown network.");
+  }
   const api = await ApiPromise.create({ provider });
 
   console.log(`Genesis hash: ${api.genesisHash.toHex()}`);
@@ -157,8 +169,16 @@ export async function run() {
   await mkdir(destination, { recursive: true });
   for (const zoneName of Object.keys(zoneFiles)) {
     const zonePath = path.join(destination, `${zoneName}.zone`);
-    zoneFiles[zoneName].unshift("@ NS vodka.dns.neatcoin.org.");
-    zoneFiles[zoneName].unshift("@ SOA vodka.dns.neatcoin.org. postmaster.that.world. (0 21600 3600 604800 86400)");
+
+    if (network === "neatcoin") {
+      zoneFiles[zoneName].unshift("@ NS dns.neatcoin.org.");
+      zoneFiles[zoneName].unshift("@ SOA dns.neatcoin.org. postmaster.that.world. (0 21600 3600 604800 86400)");
+    } else if (network === "vodka") {
+      zoneFiles[zoneName].unshift("@ NS vodka.dns.neatcoin.org.");
+      zoneFiles[zoneName].unshift("@ SOA vodka.dns.neatcoin.org. postmaster.that.world. (0 21600 3600 604800 86400)");
+    } else {
+      throw new Error("Unknown network.");
+    }
     await writeFile(zonePath, zoneFiles[zoneName].join("\n"));
   }
 
